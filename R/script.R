@@ -29,3 +29,29 @@ for(f in bf_files){
    write_csv2(summdata, path=paste0("../data/aggregated_",f), append = FALSE)
 }
 
+########### read all the data and plot some statistics
+
+setwd("/Users/isiscosta/RScript/databf/R")
+agg_files <- list.files("../data/", pattern = "aggregated")
+all_data <- tibble()
+for(f in agg_files){
+  cat(f,sep="\n")
+  data <- read.csv(paste0("../data/",f), sep = ";",
+                   dec = ",")
+  all_data <- rbind(all_data, data)
+}
+
+library(lubridate)
+p1 <- all_data %>% 
+  filter(UF %in% c("PE")) %>%
+  mutate(AnoMesReferencia = ymd(paste(AnoMesReferencia,"01"))) %>%
+  group_by(AnoMesReferencia, UF) %>%
+  summarise(numero_de_beneficios = sum(nBeneficios, na.rm=TRUE)) %>%
+  ggplot(aes(x = AnoMesReferencia, y = numero_de_beneficios, col = UF)) +
+  geom_point(stat="identity") + geom_line() +
+  ylim(0,2000000) +
+  theme_bw()+
+  labs(title = "Bolsa Família - Número de Benefícios concedidos")
+png("../figures/beneficios_por_estado.png",width=3200,height=1800,res=300)
+print(p1)
+dev.off()
