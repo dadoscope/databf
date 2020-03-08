@@ -29,17 +29,3 @@ for(f in bf_files){
    write_csv2(summdata, path=paste0("../data/aggregated_",f), append = FALSE)
 }
 
-cat(paste(summdata$AnoMesReferencia,
-          summdata$UF, 
-          summdata$NomeMunicipioSIAFI, 
-          summdata$CodigoMunicipioSIAFI, 
-          summdata$meanValor, 
-          summdata$sdValor, 
-          summdata$nBeneficios, 
-          summdata$quantile25, 
-          summdata$quantile75, 
-          summdata$quantile01, 
-          summdata$quantile99, 
-          summdata$minValor, 
-          summdata$maxValor, sep=";"), 
-    file="../data/aggregated_201409_BolsaFamilia_Pagamentos.csv",sep="\n")
